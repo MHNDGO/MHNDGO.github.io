@@ -1,0 +1,16 @@
+body.pink .site-header{
+    background: linear-gradient(to left, rgb(255, 110, 255),pink);
+    color: white;
+}
+body.pink .main{
+
+    background: url("./images/pink2.avif");
+    color: black;
+}
+body.pink #login-form{
+    background: rgb(255, 139, 177);
+}
+body.pink .calculator-section{
+    background: rgb(255, 139, 177);
+
+}

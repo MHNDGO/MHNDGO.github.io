@@ -1,0 +1,215 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Welcome to kidCalc!</title>
+        <link rel="stylesheet" href="./assets/style.css">
+        <link href="https://fonts.cdnfonts.com/css/public-pixel" rel="stylesheet">
+                  
+          <!--This code is for connecting Font Awesome Premium to the site-->
+          <link
+          rel="stylesheet"
+          data-purpose="Layout StyleSheet"
+          title="Web Awesome"
+          href="/css/app-wa-02670e9412103b5852dcbe140d278c49.css?vsn=d">
+          <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+        
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+        
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-solid.css">
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-regular.css">
+        
+        <link
+          rel="stylesheet"
+          href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-light.css">
+    </head>
+    <body>
+      <div class="result-screen-miss">
+        <div class="result-box-step">
+          <i class="fa-solid fa-thumbs-up" id="true-check"></i>
+          </i>          
+          <h1 class="result-title-false" id="result-title-great">Please complete the missing fields.</h1>
+          <button class="close-result-box-button" onclick="closePrompt()">Okay</button>
+        </div>
+      </div>
+      <div class="result-screen">
+        <div class="result-box">
+          <i class="fa-regular fa-circle-check" id="true-check"></i>   
+          <h1 class="result-title"></h1>
+          <p class="result-info"></p>
+          <button class="close-result-box-button" id="close-result-box-button-true" onclick="closePrompt()">Okay</button>
+        </div>
+      </div>
+      <div class="result-screen-false">
+        <div class="result-box-false">
+          <i class="fa-regular fa-circle-xmark" id="true-check">
+
+          </i>          
+          <h1 class="result-title-false">Try Again</h1>
+          <p class="result-info-false"></p>
+          <button class="close-result-box-button"  id="close-result-box-button-false" onclick="closePrompt()">Okay</button>
+        </div>
+      </div>
+      <div class="result-screen-step">
+        <div class="result-box-step">
+          <i class="fa-solid fa-thumbs-up" id="true-check"></i>
+          </i>          
+
+          <h1 class="result-title-false" id="result-title-great">Great, Now <a class="click-here-anchor" onclick="closePrompt()">click here</a> type your answer</h1>
+          <!-- <button class="close-result-box-button" onclick="closePrompt()">Close this prompt</button> -->
+        </div>
+      </div>
+        <header class="site-header">
+                
+        <a href="#"><h1 class="site-title"><span class="letter-k">k</span><span class="letter-i">i</span><span class="letter-d">d</span>Calc</h1></a>
+          <nav>
+            <a href="#login-form" class="create-account-anchor"><p>Create an account</p></a>
+          </nav>
+        </header>
+        <nav class="info-bar">
+          <p class="information-text">Welcome to kidCalc</p>
+      </nav>
+              <section class="main">
+          <div class="main-info">
+          <h1 class="welcome-title">Howdy Sweetheart!❤️</h1>
+          <p class="info-title">Welcome to kidCalc:</p>
+          <h1 class="title-passage">The best platform for learning math.</h1>
+          <h1 class="welcome-title" id="mini-disclaimer">But we first need to sign up!</h1>
+
+        </div>
+        </section>
+        <section id="login-form">
+          <form class="actual-login-form">
+            <h1>Let's sign you up!💻</h1>
+            <label for="name-input">First name:</label>
+            <input type="text" class="name-input" name="name-input" id="name-input" placeholder="First name:" maxlength="35">
+            <!-- <br> -->
+            <label for="name-input">Age*: </label>
+            <input type="number" class="age-input" min="5" max="10" placeholder="Age:">
+            <!-- <br> -->
+            <label for="">Theme:</label>
+            <br>
+
+            <select name="theme-select" id="theme-select">
+              <option value="green" selected >Green (Default)</option>
+
+              <option value="red" class="red">Red</option>
+              <option value="blue">Blue</option>
+              <option value="pink">Pink</option>
+
+
+
+            </select>
+            <br>
+            <button type="submit" class="login-button">Create the account!</button>
+            <p class="disclaimer">*You can only enter kidCalc if you are from 5 to 10 years old</p>
+          </form>
+        </section>
+        <section class="calculator-section" id="calculator-section">
+          <h1 class="calculator-section-heading">Let's begin the MATH!  ✖️ ➕ ➖ ➗</h1>
+          <br>
+
+          <div class="calculator">
+            <div class="calculator-info">
+              <p><span class="letter-k">k</span><span class="letter-i">i</span><span class="letter-d">d</span>Calc</p>
+              <p class="calculator-model">  FX-CALC404</p>
+            </div>
+            <div class="calculator-screen">
+              <p class="calculator-screen-text"></p>
+            </div>
+            <div class="calculator-buttons">
+              <div class="calculator-button" onclick="resultText.innerHTML = '';calculatorButtonSound.play()">
+                <p>AC</p>
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += '00'; calculatorButtonSound.play()">
+                <p>00</p>
+
+              </div>
+              <!--Delete button not working-->
+              <div class="calculator-button" onclick="deleteLastCharacter();calculatorButtonSound.play()">
+                <p><i class="fa-solid fa-delete-left" id="backspace-icon"></i></p>
+              </div>
+              <div class="calculator-button" id="divide-button" onclick="resultText.innerHTML += '>';calculatorButtonSound.play()">
+                <p>></p>
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 7;calculatorButtonSound.play()">
+                <p>7</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 8;calculatorButtonSound.play()">
+                <p>8</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 9;calculatorButtonSound.play()">
+                <p>9</p>
+
+              </div>
+              <div class="calculator-button" id="times-button" onclick="resultText.innerHTML += '<' ;calculatorButtonSound.play()">
+                <p><</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 4;calculatorButtonSound.play()">
+                <p>4</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 5;calculatorButtonSound.play()">
+                <p>5</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 6;calculatorButtonSound.play()">
+                <p>6</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += '-';calculatorButtonSound.play()">
+                <p>−</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 1;calculatorButtonSound.play()">
+                <p>1</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += 2;calculatorButtonSound.play()">
+                <p>2</p>
+
+              </div>
+              <div class="calculator-button"  onclick="resultText.innerHTML += 3;calculatorButtonSound.play()">
+                <p>3</p>
+
+              </div>
+
+              <div class="calculator-button" id="plus-button" onclick="resultText.innerHTML += '+';calculatorButtonSound.play()">
+                <p>+</p>
+              </div>
+              <div class="calculator-button" id="zero" onclick="resultText.innerHTML += 0;calculatorButtonSound.play()">
+                <p>0</p>
+
+              </div>
+              <div class="calculator-button" onclick="resultText.innerHTML += '.';calculatorButtonSound.play()">
+                <p>.</p>
+
+              </div>
+              <div class="calculator-button" id="equals-button" onclick="equalsFunction();calculatorButtonSound.play()">
+              
+                <p>=</p>
+              </div>
+            
+              <div class="calculator-button" id="submit-answer-button" onclick="answerSubmit();calculatorButtonSound.play()">
+              
+                <p>Submit</p>
+              </div>
+
+            </div>
+          </div>
+          <!-- <button type="submit" onclick="answerSubmit()" class="submit-answer-button">Submit</button> -->
+        </section>
+        
+    </body>
+    <script src="./assets/javascript/node.js"></script>
+    </html>

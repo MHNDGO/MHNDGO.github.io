@@ -1,0 +1,801 @@
+js
+const form = document.querySelector('form');
+let infoText = document.querySelector(".information-text");
+let formSection = document.getElementById("login-form")
+let createAccountAnchor = document.querySelector(".create-account-anchor")
+let equalsButton = document.getElementById("equals-button")
+let calculatorSection = document.querySelector(".calculator-section")
+let submitAnswerButton = document.getElementById("submit-answer-button")
+let timesButton = document.getElementById("times-button")
+let divideButton = document.getElementById("divide-button")
+let resultScreen = document.querySelector(".result-screen")
+let plusButton = document.getElementById("plus-button")
+let resultTitle = document.querySelector(".result-title")
+let resultInfo = document.querySelector(".result-info")
+let resultText = document.querySelector(".calculator-screen-text");
+let resultScreenFalse = document.querySelector(".result-screen-false")
+let resultTitleFalse = document.querySelector(".result-title-false")
+let resultInfoFalse = document.querySelector(".result-info-false")
+let resultScreenStep = document.querySelector(".result-screen-step")
+let calculatorButtonSound = new Audio("./assets/sounds/button3.mp3")
+calculatorButtonSound.volume = 0.4;
+let yaySound = new Audio("./assets/sounds/yay2.mp3")
+let loseSound = new Audio("./assets/sounds/lose.mp3")
+let actualResult;
+let correctlySolved = 0; // Initialize counter
+let nameValue = ''; // Declare nameValue outside the event listener
+
+form.addEventListener('submit', function (event) {
+  // Prevent the default form submission
+  event.preventDefault();
+
+  // Get the value of the "name-input" field
+  nameValue = document.querySelector("#name-input").value;
+  // Update the information-text content with the welcome message
+  let ageValue = document.querySelector(".age-input").value
+  let themeValue = document.getElementById("theme-select").value
+  console.log(ageValue,nameValue,themeValue)
+  if(ageValue == "" || themeValue == "" || nameValue == ""){
+    alert("Hey you forgot something! Please enter all fields.")
+    formSection.style.display = "flex"
+
+  }
+  else{
+    formSection.style.display = "none"
+
+    infoText.textContent = `Welcome to kidCalc, ${nameValue}`;
+    createAccountAnchor.innerHTML = "Try the calculator"
+    calculatorSection.style.display = 'flex';
+    // createAccountAnchor.attributes.href = "#calculator-section"
+  }
+
+});
+
+function compareExpression(expression) {
+  // Decode HTML entities
+  const decodedExpression = expression.replace(/&gt;/g, '>').replace(/&lt;/g, '<');
+
+  // Split the expression based on the operator
+  const parts = decodedExpression.trim().split(/\s*(<|>)\s*/);
+
+  // Ensure there are exactly two parts and an operator in between
+  if (parts.length !== 3) {
+      return false;
+  }
+
+  // Get the numbers and the operator
+  const num1 = parseFloat(parts[0]);
+  const num2 = parseFloat(parts[2]);
+  const operator = parts[1];
+
+  // Evaluate the expression
+  switch (operator) {
+      case '>':
+          return num1 > num2;
+      case '<':
+          return num1 < num2;
+      default:
+          return false;
+  }
+}
+
+
+function equalsFunction() {
+  const equation = resultText.innerHTML;
+  const isValidExpression = compareExpression(equation);
+  console.log(equation)
+  console.log(isValidExpression)
+  if (!isValidExpression) {
+      alert("Oops! This equation isn't possible. Please try again.");
+      return;
+  }
+  else if(isValidExpression = true){
+    
+  }
+else{
+  // Proceed with your logic for valid expressions
+  // For example:
+  resultText.innerHTML = '';
+  submitAnswerButton.style.display = 'block';
+  equalsButton.style.filter = 'opacity(0.5)';
+  equalsButton.style.pointerEvents = 'none';
+  timesButton.style.filter = 'opacity(0.5)';
+  timesButton.style.pointerEvents = 'none';
+  divideButton.style.filter = 'opacity(0.5)';
+  divideButton.style.pointerEvents = 'none';
+  plusButton.style.filter = 'opacity(0.5)';
+  plusButton.style.pointerEvents = 'none';
+  resultScreenStep.style.display = 'flex';
+}
+
+}
+
+function answerSubmit(){
+  let answer = resultText.innerHTML;
+  if(answer == actualResult){
+    resultScreen.style.display = "flex"
+    resultTitle.innerHTML =  "Great Job!"
+    resultInfo.innerHTML = `The answer is ${actualResult}`
+    resultText.innerHTML = ""
+    submitAnswerButton.style.display = "none"
+    equalsButton.style.filter = "opacity(1)"
+    equalsButton.style.pointerEvents = "auto"
+    timesButton.style.filter = "opacity(1)"
+    timesButton.style.pointerEvents = "auto"
+    divideButton.style.filter = "opacity(1)"
+    divideButton.style.pointerEvents = "auto"
+    plusButton.style.filter = "opacity(1)"
+    plusButton.style.pointerEvents = "auto"
+    yaySound.play()
+ 
+    correctlySolved++; // Increment counter
+    infoText.textContent = `Welcome to kidCalc, ${nameValue}. You've solved ${correctlySolved} problems correctly!`; // Update info bar
+  } else {
+    resultScreenFalse.style.display = "flex"
+    resultTitleFalse.innerHTML =  "Try again!"
+    resultInfoFalse.innerHTML = `The answer is ${actualResult}`
+    resultText.innerHTML = ""
+    submitAnswerButton.style.display = "none"
+    equalsButton.style.filter = "opacity(1)"
+    equalsButton.style.pointerEvents = "auto"
+    timesButton.style.filter = "opacity(1)"
+    timesButton.style.pointerEvents = "auto"
+    divideButton.style.filter = "opacity(1)"
+    divideButton.style.pointerEvents = "auto"
+    plusButton.style.filter = "opacity(1)"
+    plusButton.style.pointerEvents = "auto"
+    loseSound.play()
+  }
+}
+
+function closePrompt(){
+  resultScreen.style.display = 'none'
+  resultScreenFalse.style.display = "none"
+  resultScreenStep.style.display = "none"
+  yaySound.pause()
+  loseSound.pause()
+}
+html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to kidCalc!</title>
+    <link rel="stylesheet" href="./assets/style.css">
+    <link href="https://fonts.cdnfonts.com/css/public-pixel" rel="stylesheet">
+              
+      <!--This code is for connecting Font Awesome Premium to the site-->
+      <link
+      rel="stylesheet"
+      data-purpose="Layout StyleSheet"
+      title="Web Awesome"
+      href="/css/app-wa-02670e9412103b5852dcbe140d278c49.css?vsn=d">
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js"></script>
+    
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.4.2/css/all.css">
+    
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-solid.css">
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-regular.css">
+    
+    <link
+      rel="stylesheet"
+      href="https://site-assets.fontawesome.com/releases/v6.4.2/css/sharp-light.css">
+</head>
+<body>
+  <div class="result-screen">
+    <div class="result-box">
+      <i class="fa-regular fa-circle-check" id="true-check"></i>   
+      <h1 class="result-title"></h1>
+      <p class="result-info"></p>
+      <button class="close-result-box-button" id="close-result-box-button-true" onclick="closePrompt()">Okay</button>
+    </div>
+  </div>
+  <div class="result-screen-false">
+    <div class="result-box-false">
+      <i class="fa-regular fa-circle-xmark" id="true-check">
+
+      </i>          
+      <h1 class="result-title-false"></h1>
+      <p class="result-info-false"></p>
+      <button class="close-result-box-button"  id="close-result-box-button-false" onclick="closePrompt()">Okay</button>
+    </div>
+  </div>
+  <div class="result-screen-step">
+    <div class="result-box-step">
+      <i class="fa-solid fa-thumbs-up" id="true-check"></i>
+      </i>          
+      <h1 class="result-title-false" id="result-title-great">Great, Now <a class="click-here-anchor" onclick="closePrompt()">click here</a> type your answer</h1>
+      <!-- <button class="close-result-box-button" onclick="closePrompt()">Close this prompt</button> -->
+    </div>
+  </div>
+    <header class="site-header">
+            
+    <a href="#"><h1 class="site-title"><span class="letter-k">k</span><span class="letter-i">i</span><span class="letter-d">d</span>Calc</h1></a>
+      <nav>
+        <a href="#login-form" class="create-account-anchor"><p>Create an account</p></a>
+      </nav>
+    </header>
+    <nav class="info-bar"><p class="information-text">Welcome to kidCalc</p></nav>
+    <section class="main">
+      <div class="main-info">
+      <h1 class="welcome-title">Howdy Sweetheart!❤️</h1>
+      <p class="info-title">Welcome to kidCalc:</p>
+      <h1 class="title-passage">The best platform for learning math.</h1>
+      
+    </div>
+    </section>
+    <section id="login-form">
+      <form class="actual-login-form">
+        <h1>Let's sign you up!💻</h1>
+        <label for="name-input">Name:</label>
+        <br>
+        <input type="text" name="name-input" id="name-input" placeholder="Name:">
+        <br>
+        <label for="name-input">Age*: </label>
+        <br>
+        <input type="number" class="age-input" min="5" max="14" placeholder="Age:">
+        <br>
+        <label for="">Theme:</label>
+        <br>
+
+        <select name="theme-select" id="theme-select">
+          <option disabled value="" selected>Select your theme:</option>
+          <option value="red" class="red">Red</option>
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="yellow">Yellow</option>
+
+
+
+        </select>
+        <br>
+        <button type="submit" class="login-button">Create the account!</button>
+        <p class="disclaimer">*You can only enter kidCalc if you are from 5 to 14 years old, Sorry those are the rules!</p>
+      </form>
+    </section>
+    <section class="calculator-section" id="calculator-section">
+      <h1>Let's begin the MATH!  ✖️ ➕ ➖ ➗</h1>
+      <br>
+
+      <div class="calculator">
+        <div class="calculator-info">
+          <p><span class="letter-k">k</span><span class="letter-i">i</span><span class="letter-d">d</span>Calc</p>
+          <p class="calculator-model">  FX-CALC404</p>
+        </div>
+        <div class="calculator-screen">
+          <p class="calculator-screen-text"></p>
+        </div>
+        <div class="calculator-buttons">
+          <div class="calculator-button" onclick="resultText.innerHTML = '';calculatorButtonSound.play()">
+            <p>AC</p>
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '>'; calculatorButtonSound.play()">
+            <p>></p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML = resultText.innerHTML.slice(0,-1);calculatorButtonSound.play()">
+            <p><i class="fa-solid fa-delete-left" id="backspace-icon"></i></p>
+          </div>
+          <div class="calculator-button" id="divide-button" onclick="resultText.innerHTML += ' / ';calculatorButtonSound.play()">
+            <p>÷</p>
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '7';calculatorButtonSound.play()">
+            <p>7</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '8';calculatorButtonSound.play()">
+            <p>8</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '9';calculatorButtonSound.play()">
+            <p>9</p>
+
+          </div>
+          <div class="calculator-button" id="times-button" onclick="resultText.innerHTML += ' < ';calculatorButtonSound.play()">
+            <p><</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '4';calculatorButtonSound.play()">
+            <p>4</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '5';calculatorButtonSound.play()">
+            <p>5</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '6';calculatorButtonSound.play()">
+            <p>6</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += ' - ';calculatorButtonSound.play()">
+            <p>−</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '1';calculatorButtonSound.play()">
+            <p>1</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '2';calculatorButtonSound.play()">
+            <p>2</p>
+
+          </div>
+          <div class="calculator-button"  onclick="resultText.innerHTML += '3';calculatorButtonSound.play()">
+            <p>3</p>
+
+          </div>
+
+          <div class="calculator-button" id="plus-button" onclick="resultText.innerHTML += '+';calculatorButtonSound.play()">
+            <p>+</p>
+          </div>
+          <div class="calculator-button" id="zero" onclick="resultText.innerHTML += '0';calculatorButtonSound.play()">
+            <p>0</p>
+
+          </div>
+          <div class="calculator-button" onclick="resultText.innerHTML += '.';calculatorButtonSound.play()">
+            <p>.</p>
+
+          </div>
+          <div class="calculator-button" id="equals-button" onclick="equalsFunction();calculatorButtonSound.play()">
+          
+            <p>=</p>
+          </div>
+        
+          <div class="calculator-button" id="submit-answer-button" onclick="answerSubmit();calculatorButtonSound.play()">
+          
+            <p>Submit</p>
+          </div>
+
+        </div>
+      </div>
+      <!-- <button type="submit" onclick="answerSubmit()" class="submit-answer-button">Submit</button> -->
+    </section>
+    
+</body>
+<script src="./assets/javascript/node.js"></script>
+</html>
+css
+*{
+    box-sizing: border-box;
+    scroll-behavior: smooth;
+    margin: 0;
+    padding: 0;
+}
+::-webkit-scrollbar {
+    width: 1em;
+  
+  
+  }
+  
+  ::-webkit-scrollbar-track {
+    background: rgb(255, 255, 255);
+    border-radius: 100vw;
+    margin-block: .5em;
+  }
+  
+  ::-webkit-scrollbar-thumb {
+  
+    border-radius: 100vw;
+  
+    transition: 0.5s ease;
+    background: pink;
+  }
+  
+  ::-webkit-scrollbar-thumb:hover {
+    background-image: linear-gradient(to bottom, red, rgb(241, 128, 147));
+    transition: 0.5s ease;
+  
+  }
+  
+  
+  
+body{
+    font-family: 'Comic Sans MS';
+    cursor: url("./images/Kids-cursor.png"),auto;
+}
+.site-header {
+    background-image: linear-gradient(to left, red, rgb(241, 128, 147));
+    position: sticky;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 999999;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    height: 50px;
+    padding: 10px 20px;
+    transition: all 0.3s ease-in-out;
+    
+    box-shadow: 0 10px 15px rgb(0 0 0 / 20%);
+    justify-content: space-between;
+    width: 100%;
+  
+  
+  }
+  .site-title{
+    position: relative;
+    top: -8px;
+  }
+  .letter-d{
+        color: yellow;
+  }
+  .letter-i{
+    color: red;
+}
+.letter-k{
+    color: rgb(0, 64, 255);
+}
+.info-bar{
+    background-color: rgb(197, 211, 238);
+    width: 100%;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    color: black;
+    padding-top: 3px;
+    position: fixed;
+}
+a{
+    text-decoration: none;
+    color: unset;
+}
+.create-account-anchor{
+    position: relative;
+    top: -8px;
+    color: white;
+    transition: 0.2s ease;
+}
+.create-account-anchor:hover{
+    color: black;
+}
+.main{
+    background: url("./images/main-section.webp");
+    width: 100%;
+    min-height: 100vh;
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+}
+.main-info{
+    margin-right: 700px;
+    margin-top: 100px;
+    font-size: 25px;
+
+}
+.welcome-title{
+    padding-bottom: 20px;
+
+}
+.title-passage{
+    font-size: 40px;
+    margin-top: 10px;
+}
+#login-form, .calculator-section{
+    width: 100%;
+    background-color: red;
+    display: flex;
+    align-items: center;
+    padding: 25px;
+    font-size: 10px;
+    border-top: 1px solid rgba(255,255,255,0.5);
+    justify-content: center;
+}
+.calculator-section{
+    text-align: center;
+    flex-direction: column;
+    display: flex;
+}
+.actual-login-form{
+    width: 750px;
+    background-color: rgb(145, 149, 149);
+    padding: 50px;
+    font-size: 25px;
+    border-radius: 20px;
+    display: grid;
+    grid-template-columns:100px ;
+    grid-template-rows: repeat(300px, 4);
+    justify-content: center;
+}
+.actual-login-form h1, .calculator-section h1{
+    text-align: center;
+    font-size: 20px;
+    padding-bottom: 10px    ;
+}
+.age-input, #name-input,#theme-select{
+    background-color: white;
+    border: 1px solid rgb(188, 182, 182);
+    outline: none;
+    border-radius: 5px;
+    padding: 10px;
+}
+#theme-select{
+
+    padding: 7px;  
+}
+.login-button{
+    padding: 7px;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    background-color: white;
+    transition: 0.2s ease;
+    margin-top: 20px;
+}
+.login-button:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.disclaimer{
+    font-size: 10px;
+    text-align: center;
+    padding-top: 20px;
+}
+label{
+    font-size: 15px;
+}
+.calculator {
+    border: 1px solid black;
+    border-radius: 15px;
+     padding: 20px;
+     background: linear-gradient(to bottom, white, gray);
+ 
+ }
+ .calculator-info{
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
+     font-size: 25px;
+ }
+ .calculator-model{
+     font-family:'Times New Roman', Times, serif;
+     font-weight: 800;
+ }
+ .calculator-screen {
+     background-color: #2b8c2a;
+     color: #014422;
+     width: 250px;
+     height: 70px;
+     border-radius: 15px;
+     font-size: 25px;
+     display: flex;
+     border: 1px solid black;
+     align-items: center;
+     padding: 10px;
+     font-family: 'Public Pixel';
+     user-select: none;
+     margin-top: 10px;
+     margin-bottom: 20px;
+ 
+     overflow-x: auto; /* Enable horizontal scrollbar */
+     white-space: nowrap; /* Prevent line breaks */
+ }
+ #backspace-icon{
+         margin-right: 5px;
+ }
+ 
+ .calculator-buttons{
+     display: grid;
+     grid-template-columns: repeat(4,60px);
+     grid-template-rows: repeat(5,60px);
+     gap: 5px;
+     margin-top: 10px;
+     font-family: "Consolas";
+ }
+ .calculator-button{
+     width: 100%;
+     height: 60px;
+     border-radius: 50px;
+     background:linear-gradient(to top, black, gray);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     user-select: none;
+ 
+ }
+ .calculator-button p {
+     color: white;
+     font-size: 30px;
+     
+ }
+ .calculator-button:hover{
+     cursor: pointer;
+ }
+ .calculator-button:active{
+     background:linear-gradient(to top, gray, black);
+ }
+ #zero{
+     grid-column-start: 1 ;
+     grid-column-end: 3;
+ }
+ 
+#submit-answer-button{
+    grid-column-start: 1;
+    grid-column-end:5 ;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding-top: 15px;
+}
+.result-screen,.result-screen-false,.result-screen-step {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Semi-transparent black overlay */
+    z-index: 9999; /* Ensure it's above other elements */
+    justify-content: center;
+    align-items: center;
+    display: none;
+    align-items: center;
+    text-align: center;
+    justify-content: center;
+}
+.result-box,.result-box-false,.result-box-step{
+    width: 800px;
+    height: 500px;
+    background-color: #2b8c2a;
+    border-radius: 15px;
+    flex-direction: column;
+
+    background:linear-gradient(to right, green,rgb(145, 206, 146));
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+
+.result-box-false{
+    background: linear-gradient(to right, red,rgb(206, 145, 145));
+    
+}
+.result-box-step{
+    background: linear-gradient(to right, white, gray);
+
+}
+/*Media query for bigger displays*/
+#true-check{
+    color: white;
+    font-size: 120px;
+    margin-top: 60px;
+    margin-bottom: 10px;
+}
+.result-title{
+    align-self: center;
+    margin-bottom: 10px;
+
+    color: white;
+}
+.result-info{
+    color: white;
+}
+.close-result-box-button{
+    background-color:white;
+    border: 1px solid black;
+    outline: none;
+    padding: 10px;    
+    border-radius: 10px;
+    margin-top: 10px;
+    transition: 0.2s ease;
+}
+.close-result-box-button:hover{
+    background-color: black;
+    color: white;
+    cursor: pointer;
+}
+.click-here-anchor{
+    text-decoration: underline;
+
+}
+.click-here-anchor:hover{
+    cursor: pointer;
+    color: gray;
+}
+#close-result-box-button-true:hover{
+    background-color: #2b8c2a;
+}
+#close-result-box-button-false:hover{
+    background-color: red;
+}
+#result-title-great{
+    margin-top: 20px;
+}
+@media screen and (min-width: 768px){
+    .site-header{
+        padding: 10px 200px;
+    }
+    .main{
+        font-size: 20px;
+
+    }
+    .actual-login-form h1{
+        font-size: 35px;
+    }
+   .disclaimer{
+    font-size: 15px;
+   }
+   .calculator {
+    border: 1px solid black;
+    border-radius: 15px;
+     padding: 20px;
+     background: linear-gradient(to bottom, white, gray);
+ 
+ }
+ .calculator-info{
+     width: 100%;
+     display: flex;
+     justify-content: space-between;
+     font-size: 25px;
+ }
+ .calculator-model{
+     font-family:'Times New Roman', Times, serif;
+     font-weight: 800;
+ }
+ .calculator-screen {
+     background-color: #2b8c2a;
+     color: #014422;
+     width: 360px;
+     height: 100px;
+     border-radius: 15px;
+     font-size: 35px;
+     display: flex;
+     border: 1px solid black;
+     align-items: center;
+     padding: 10px;
+     font-family: 'Public Pixel';
+     user-select: none;
+     margin-top: 10px;
+     margin-bottom: 20px;
+ 
+     overflow-x: auto; /* Enable horizontal scrollbar */
+     white-space: nowrap; /* Prevent line breaks */
+ }
+ #backspace-icon{
+         margin-right: 5px;
+ }
+ 
+ .calculator-buttons{
+     display: grid;
+     grid-template-columns: repeat(4,80px);
+     grid-template-rows: repeat(5,80px);
+     gap: 10px;
+     margin-top: 10px;
+     font-family: "Consolas";
+ }
+ .calculator-button{
+     width: 100%;
+     height: 80px;
+     border-radius: 50px;
+     background:linear-gradient(to top, black, gray);
+     display: flex;
+     align-items: center;
+     justify-content: center;
+     user-select: none;
+ 
+ }
+ .calculator-button p {
+     color: white;
+     font-size: 40px;
+     
+ }
+ .calculator-button:hover{
+     cursor: pointer;
+ }
+ .calculator-button:active{
+     background:linear-gradient(to top, gray, black);
+ }
+ #zero{
+     grid-column-start: 1 ;
+     grid-column-end: 3;
+ }
+}

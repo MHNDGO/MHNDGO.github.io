@@ -1,0 +1,15 @@
+body.red .site-header{
+    background-image: linear-gradient(to left, red, rgb(241, 128, 147));
+}
+body.red .main{
+    background: url("./images/main-section.webp");
+    background-repeat: no-repeat;
+    background-size: cover;
+    color: white;
+}
+body.red #login-form{
+    background: red;
+}
+body.red .calculator-section{
+    background: red;
+}

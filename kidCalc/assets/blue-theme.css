@@ -1,0 +1,16 @@
+body.blue .site-header{
+    background: linear-gradient(to left, rgb(0, 153, 255), rgb(184, 212, 220));
+    color: white;
+}
+body.blue .main{
+    background: url("./images/cloud-blue.jpg");
+    background-size: contain;
+    color: black;
+}
+body.blue #login-form{
+    background: rgb(0, 191, 255);
+}
+body.blue .calculator-section{
+    background: rgb(0, 191, 255);
+
+}
