@@ -1,0 +1,280 @@
+/** TODO: Build the navigation bar using JavaScript **/
+const sections = document.querySelectorAll('section');
+
+//The event listener ensures that the website is properly loaded before trying
+document.addEventListener('DOMContentLoaded', () => {
+    //This selects the Navbar UL item with the navbar__list'
+    const navList = document.getElementById('navbar__list');
+    //This selects all the sections in the website
+  
+    //This is the function to create new nav items dynamically
+    function createNavItems() {
+    /*
+    This function says that for every section on the website 2 variables called sectionID 
+    and sectionNav get created and these contain the section's ID and data-nav value
+    and for every section it also creates 2 variables called listItem and anchor which contain 
+    a created li element and a created anchor element then it gives the anchor a
+    class called menu__link then changes the href attribute of this anchor to the
+    ID of the section and also changes the textContent of that anchor to the value
+    of the data-nav attribute then after that it appends the anchor into the listItem
+    then appends the listItem to the navList(The UL).
+     */
+    
+      sections.forEach(section => {
+        const sectionID = section.getAttribute('id');
+        const sectionNav = section.getAttribute('data-nav');
+        const listItem = document.createElement('li');
+        const anchor = document.createElement('a');
+  
+        anchor.classList.add('menu__link');
+        anchor.href = `#${sectionID}`;
+        anchor.textContent = sectionNav;
+  
+        listItem.appendChild(anchor);
+        navList.appendChild(listItem);
+      });
+    }
+  
+    //This call the function to create nav items
+    createNavItems();
+  
+   
+  
+/** TODO: Add smooth scrolling **/
+ /* 
+ This function selects the LI element we just appended to the DOM with all the IDs and attributes
+ then it says that for every link there is an event listener that detects if an element
+ gets clicked and if it gets clicked it will first prevent the default ations that the browser would
+ do then it will get the ID of the section that the link element redirects to then it will
+ select the section with that ID then with the scrollIntoView method we can control the 
+ behavior of the scrolling which I set to smooth. 
+ */
+ function addSmoothScrolling() {
+    const links = document.querySelectorAll('.menu__link');
+
+    links.forEach(link => {
+      link.addEventListener('click', (event) => {
+        event.preventDefault();
+        const targetID = link.getAttribute('href');
+        const targetSection = document.querySelector(targetID);
+
+        targetSection.scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+  }
+
+  // This calls the function to add smooth scrolling
+  addSmoothScrolling();
+/** TODO: Add an active state **/
+document.addEventListener("scroll",function(){
+    sections.forEach(section => {
+        let sectionRect = section.getBoundingClientRect();
+        if(sectionRect.top >= 0 && sectionRect.top < window.innerHeight || sectionRect.bottom >  0 && sectionRect.top <= window.innerHeight){
+            section.classList.add("active")
+        }
+        else{
+            section.classList.remove("active")
+        }
+    })
+})
+/** TODO: Add a comment form **/
+// Function to save comments to localStorage
+function saveCommentsToLocal(comment) {
+  let comments = JSON.parse(localStorage.getItem('comments')) || [];
+  comments.push(comment);
+  localStorage.setItem('comments', JSON.stringify(comments));
+}
+
+// Function to load comments from localStorage and create comment elements
+function loadCommentsFromLocal() {
+  let comments = JSON.parse(localStorage.getItem('comments')) || [];
+
+  // Create comment elements for each stored comment
+  comments.forEach(comment => {
+    let newComment = document.createElement('div');
+    newComment.className = 'comment-box';
+    newComment.innerHTML = `
+      <div class="comment-info">
+        <div class="pfp"></div>
+        <div class="text-info">
+          <h3 class="name">${comment.name}</h3>
+          <p class="email">${comment.email}</p>
+        </div>
+      </div>
+      <div class="comment-content">
+        <p>${comment.content}</p>
+      </div>
+    `;
+    
+    // Find the h2 element in the comment section
+    let commentSection = document.querySelector("#comment-section .landing__container");
+    let commentHeader = commentSection.querySelector('h2');
+
+    // Insert the new comment after the h2 element
+    commentHeader.insertAdjacentElement('afterend', newComment);
+  });
+}
+
+  // Load existing comments from localStorage
+  loadCommentsFromLocal();
+
+  let createCommentButton = document.querySelector(".create-comment-button");
+  createCommentButton.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    let commenterNameField = document.querySelector("#name-field");
+    let commenterEmailField = document.querySelector("#email-field");
+    let commenterContentField = document.querySelector(".create-content-textarea");
+    let commenterName = commenterNameField.value;
+    let commenterEmail = commenterEmailField.value;
+    let commenterContent = commenterContentField.value;
+
+    // Email validation using regular expression
+    let emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    if (!emailPattern.test(commenterEmail)) {
+      alert("Please enter a valid email address.");
+      return; // Stop the execution if email is invalid
+    }
+
+    if (commenterName.length > 20) {
+      alert("Name cannot be longer than 20 letters");
+      return; // Stop the execution if name is too long
+    }
+
+    if (commenterEmail.length > 50) {
+      alert("Email cannot be longer than 50 letters");
+      return; // Stop the execution if email is too long
+    }
+
+    if (commenterContent.length > 250) {
+      alert("Comment cannot be longer than 250 letters");
+      return; // Stop the execution if email is too long
+    }
+    
+    if (commenterName !== "" && commenterEmail !== "" && commenterContent !== "") {
+      // Save comment to localStorage
+      saveCommentsToLocal({
+        name: commenterName,
+        email: commenterEmail,
+        content: commenterContent
+      });
+
+      // Create a new comment element
+      let newComment = document.createElement('div');
+      newComment.className = 'comment-box';
+      newComment.innerHTML = `
+        <div class="comment-info">
+          <div class="pfp"></div>
+          <div class="text-info">
+            <h3 class="name">${commenterName}</h3>
+            <p class="email">${commenterEmail}</p>
+          </div>
+        </div>
+        <div class="comment-content">
+          <p>${commenterContent}</p>
+        </div>
+      `;
+
+      // Find the h2 element in the comment section
+      let commentSection = document.querySelector("#comment-section .landing__container");
+      let commentHeader = commentSection.querySelector('h2');
+
+      // Insert the new comment after the h2 element
+      commentHeader.insertAdjacentElement('afterend', newComment);
+
+      // Clear the form fields
+      commenterNameField.value = '';
+      commenterEmailField.value = '';
+      commenterContentField.value = '';
+    } else {
+      alert("Please ensure all fields are filled out.");
+    }
+  });
+
+//code to hide header after 5 seconds of no scrolling
+  var header = document.querySelector('.page__header');
+  var timeout;
+  var lastScrollTop = 0;
+  var delta = 5; // Adjust this value to set the scrolling sensitivity
+
+  function showHeader() {
+    header.classList.remove('hidden');
+    header.style.transform = 'translateY(0)';
+  }
+
+  function hideHeader() {
+    header.classList.add('hidden');
+    header.style.transform = 'translateY(-100%)';
+  }
+
+  function hasScrolled() {
+    var st = window.scrollY || document.documentElement.scrollTop;
+
+    // Make sure they scroll more than delta
+    if (Math.abs(lastScrollTop - st) <= delta)
+      return;
+
+    if (st > lastScrollTop && st > header.offsetHeight) {
+      // Scroll down
+      hideHeader();
+    } else {
+      // Scroll up
+      showHeader();
+    }
+
+    lastScrollTop = st;
+  }
+
+  // Set initial state
+  showHeader();
+
+  // Listen for scroll events
+  window.addEventListener('scroll', function() {
+    clearTimeout(timeout);
+    hasScrolled();
+    timeout = setTimeout(function() {
+      hideHeader();
+    }, 2000); // Adjust delay as needed to hide header after no scrolling
+  });
+
+  // Re-show header on initial page load
+  setTimeout(function() {
+    showHeader();
+  }, 500); // Adjust initial display delay as needed
+
+
+
+  document.addEventListener("DOMContentLoaded", function() {
+    const topButton = document.querySelector('.top');
+
+    function toggleTopButtonVisibility() {
+        // Calculate scroll position once for efficiency
+        const isScrolled = window.scrollY > 0;
+
+        // Toggle class based on scroll position
+        if (isScrolled) {
+            topButton.classList.add('show');
+        } else {
+            topButton.classList.remove('show');
+        }
+    }
+
+    // Initial check on page load
+    toggleTopButtonVisibility();
+
+    // Add scroll event listener to toggle visibility
+    window.addEventListener('scroll', toggleTopButtonVisibility);
+
+    // Functionality to scroll to top when top button is clicked
+    topButton.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+});
+
+});
+
